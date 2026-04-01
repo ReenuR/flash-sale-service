@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: flash-sale-service
+
+  # PostgreSQL
+  datasource:
+    url: jdbc:postgresql://localhost:5432/flashsaledb
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  # Kafka
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+# App config
+app:
+  rate-limit:
+    max-requests: 5
+    window-seconds: 60
+  inventory:
+    sale-duration-seconds: 600
