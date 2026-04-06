@@ -14,11 +14,21 @@ public class InventoryService {
 
     // — quantity comes from the caller
     public void initializeStock(String saleId, int quantity){
-        redisTemplate.opsForValue().set("inventory:"+saleId, String.valueOf(quantity));
+        System.out.println("=== initializeStock called: " + saleId + " quantity: " + quantity);
+        try{
+            redisTemplate.opsForValue().set("inventory:"+saleId, String.valueOf(quantity));
+            System.out.println("=== Redis set successful");
+        } catch (Exception e) {
+            System.out.println("=== Redis error: " + e.getMessage());
+            throw e;
+        }
+
     }
     public boolean reserveItem(String saleId) {
         String key = "inventory:" + saleId;
+        System.out.println("=== reserveItem key: " + key);
         Long stock = redisTemplate.opsForValue().decrement(key);
+        System.out.println("=== stock after decrement: " + stock);
 
         if (stock == null || stock < 0) {
             redisTemplate.opsForValue().increment(key); // undo

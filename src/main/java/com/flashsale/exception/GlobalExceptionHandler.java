@@ -19,6 +19,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception e){
+        e.printStackTrace();
         return ResponseEntity.status(500).body("Something went wrong");
     }
 }

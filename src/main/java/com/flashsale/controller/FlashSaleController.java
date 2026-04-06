@@ -17,13 +17,14 @@ public class FlashSaleController {
 
     @PostMapping("/{saleId}/buy")
     public ResponseEntity<String> buyItem(@PathVariable String saleId, @RequestBody BuyRequest buyRequestDTO){
+        System.out.println("=== Buy controller hit: " + saleId);
         flashSaleService.buyItem(buyRequestDTO.getUserId(), saleId, buyRequestDTO.getProductId());
         return ResponseEntity.ok("Order placed successfully");
     }
 
     @PostMapping("/{saleId}/init")
-    public ResponseEntity<String> initializeStock(@PathVariable String saleId, @RequestParam int qty){
-        flashSaleService.initializeStock(saleId, qty);
+    public ResponseEntity<String> initializeStock(@PathVariable String saleId, @RequestParam int quantity){
+        flashSaleService.initializeStock(saleId, quantity);
         return ResponseEntity.ok("Stock initialized");
     }
 

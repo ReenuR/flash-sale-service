@@ -2,6 +2,8 @@ package com.flashsale.service;
 
 import com.flashsale.entity.Order;
 import com.flashsale.entity.OrderStatus;
+import com.flashsale.exception.RateLimitExceededException;
+import com.flashsale.exception.SoldOutException;
 import com.flashsale.kafka.OrderEventProducer;
 import com.flashsale.repository.OrderRepository;
 import org.springframework.stereotype.Service;
@@ -27,11 +29,11 @@ public class FlashSaleService {
     public void buyItem(String userId, String saleId, String productId){
         // Check rate limiter
         if(!rateLimiterService.isAllowed(userId))
-            throw new RuntimeException("User Not Allowed!");
+            throw new RateLimitExceededException("Rate limit exceeded");
 
         //Check inventory
-        if(!inventoryService.reserveItem("FlashSale001"))
-            throw new RuntimeException("Sold out!");
+        if(!inventoryService.reserveItem(saleId))
+            throw new SoldOutException("Sold out!");
 
         Order order = Order.builder()
                 .userId(userId)
@@ -49,7 +51,13 @@ public class FlashSaleService {
     }
 
     public void initializeStock(String saleId, int quantity) {
-        inventoryService.initializeStock(saleId, quantity);
+        try{
+            inventoryService.initializeStock(saleId, quantity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
     }
 
     public int getStock(String saleId) {

@@ -18,12 +18,12 @@ public class RateLimiterService {
                               @Value("${app.rate-limit.max-requests}") int maxRequests,
                               @Value("${app.rate-limit.window-seconds}") int windowSeconds) {
         this.redisTemplate = redisTemplate;
-        this.maxRequests = windowSeconds;
+        this.maxRequests = maxRequests;
         this.windowSeconds = windowSeconds;
     }
 
    public boolean isAllowed(String userId){
-
+       System.out.println("=== isAllowed called for: " + userId + " maxRequests: " + maxRequests + " windowSeconds: " + windowSeconds);
        long now = System.currentTimeMillis();
        long windowStart = now - (windowSeconds * 1000L);
        String key = "rate_limit:" + userId;
