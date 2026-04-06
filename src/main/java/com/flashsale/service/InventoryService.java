@@ -1,5 +1,6 @@
 package com.flashsale.service;
 
+import com.flashsale.config.RedisKeys;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class InventoryService {
 
     }
     public boolean reserveItem(String saleId) {
-        String key = "inventory:" + saleId;
+        String key = RedisKeys.inventoryKey(saleId);
         System.out.println("=== reserveItem key: " + key);
         Long stock = redisTemplate.opsForValue().decrement(key);
         System.out.println("=== stock after decrement: " + stock);

@@ -1,5 +1,6 @@
 package com.flashsale.service;
 
+import com.flashsale.config.RedisKeys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class RateLimiterService {
        System.out.println("=== isAllowed called for: " + userId + " maxRequests: " + maxRequests + " windowSeconds: " + windowSeconds);
        long now = System.currentTimeMillis();
        long windowStart = now - (windowSeconds * 1000L);
-       String key = "rate_limit:" + userId;
+       String key = RedisKeys.rateLimitKey(userId);
        redisTemplate.opsForZSet().removeRangeByScore(key, 0, windowStart);
        Long count = redisTemplate.opsForZSet().size(key);
 
