@@ -48,5 +48,13 @@ public class FlashSaleService {
         orderEventProducer.publishOrderCreated(order);
     }
 
+    public void initializeStock(String saleId, int quantity) {
+        inventoryService.initializeStock(saleId, quantity);
+    }
+
+    public int getStock(String saleId) {
+        return inventoryService.getStock(saleId);
+    }
+
 
 }

@@ -27,4 +27,9 @@ public class InventoryService {
         return true;
     }
 
+    public int getStock(String saleId){
+        String value = redisTemplate.opsForValue().get("inventory:" + saleId);
+        return value != null ? Integer.parseInt(value) : 0;
+    }
+
 }
